@@ -2,32 +2,24 @@ package org.academy.langton;
 
 import processing.core.PApplet;
 
-public class TricolourAnt implements Ant {
-    private GridPosition gridPosition;
+public class TricolourAnt extends AntTemplate implements Ant {
     private Direction direction;
-    private final Ground ground;  //ref won't change once ant is created
 
-    //named "p5" for brevity and familiarity, even though it's not actually p5 but a "Processing Applet" instance.
-    private final PApplet p5;
 
     //there's no real "color" type, it's just stored as an int
     private final int myColour;
 
     public TricolourAnt(PApplet p5, Ground ground, GridPosition startPos) {
-        this.p5 = p5;
+        super(p5, ground, startPos);
         this.direction = Direction.random();
-        this.ground = ground;
-        this.gridPosition = new GridPosition(startPos.x(), startPos.y());
         this.myColour = p5.color(255, 255, 0);
     }
 
+    @Override
     public void display() {
         p5.fill(myColour);
         Ground.drawSquareAtGridPosition(gridPosition, p5, ground.getCellSize());
         displayGridPositionAsText();
-    }
-    public GridPosition getGridPosition() {
-        return gridPosition.copy();
     }
 
     void displayGridPositionAsText() {
@@ -36,6 +28,7 @@ public class TricolourAnt implements Ant {
         p5.text(gridPosition.toString(), 20, 50);
     }
 
+    @Override
     public void update() {
         Cell currentCell = ground.cellAt(gridPosition);
 
@@ -52,17 +45,6 @@ public class TricolourAnt implements Ant {
 
     private void moveForward() {
         moveInDirection(direction);
-    }
-
-    private void moveInDirection(Direction givenDir) {
-        DirectionalOffset offset = DirectionalOffset.offsetFor(givenDir);
-        GridPosition candidatePosition = GridPosition.add(
-                gridPosition, offset.x(), offset.y());
-        if (ground.isPositionOutOfBounds(candidatePosition)) {
-            gridPosition = ground.midpoint().copy();
-        } else {
-            gridPosition = candidatePosition;
-        }
     }
 
     private void turnClockwise() {

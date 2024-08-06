@@ -2,7 +2,7 @@ package org.academy.langton;
 
 import processing.core.PApplet;
 
-//TODO: remove this javascript implementation link
+//javascript implementation link
 //https://openprocessing.org/sketch/2248058
 public class Main extends PApplet {
     private Ant ant;
